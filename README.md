@@ -9,6 +9,8 @@ Clone the repository.
 # IDE
 The workspace is prepared for using eclipse with groovy nature with Groovy Development Tools Version 4.8.0-Release.
 
+Use `gradle eclipse` to prepare eclipse for your workspace.
+
 # Start
 Use:
 * grails run-app or
