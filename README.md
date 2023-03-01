@@ -18,3 +18,6 @@ Go to url http://localhost:8080/hello/index with you browser.
 
 # Source Code
 All is implemented in the HelloController.
+
+# Upgrading Grails
+In a Grails 5.3.2 project the HelloController works without changes.
