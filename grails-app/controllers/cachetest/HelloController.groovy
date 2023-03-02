@@ -1,9 +1,14 @@
 package cachetest
 
-// with this annotation dependencies the cache works
-// but the dependency injection of the grailsCacheManager did not work
+import org.springframework.cache.CacheManager
+
 import grails.plugin.cache.CacheEvict
 import grails.plugin.cache.Cacheable
+
+// with this annotation dependencies the cache works
+// but the dependency injection of the grailsCacheManager did not work
+//import grails.plugin.cache.CacheEvict
+//import grails.plugin.cache.Cacheable
 
 // with this annotations dependencies the cache didn't work
 // but the dependency injection of the grailsCacheManager work
@@ -11,7 +16,7 @@ import grails.plugin.cache.Cacheable
 //import org.springframework.cache.annotation.Cacheable
 
 class HelloController {
-	// def grailsCacheManager
+	CacheManager grailsCacheManager
 
 	def startTime
 	def fromCache
@@ -22,16 +27,6 @@ class HelloController {
 		if (!startTime) {
 			startTime = System.currentTimeMillis()
 		}
-		//		println "grailsCacheManager $grailsCacheManager"
-		//		def cacheNames = grailsCacheManager.getCacheNames()
-		//		println "cacheNames: $cacheNames"
-		//		cacheNames.each {
-		//			def cache = grailsCacheManager.getCache(it)
-		//			println "cache $it: $cache"
-		//			cache.getAllKeys().each{ key ->
-		//				println "cache entry: ${it}.${key} = ${cache.get(key).get()}"
-		//			}
-		//		}
 		def text = """
 			<p><i>(Request ${System.currentTimeMillis() - startTime}ms after first request.)</i></p>
 			<p>The same p in the url shows no queryValue log, another value shows it! Try:</p>
@@ -66,7 +61,24 @@ class HelloController {
 		} else {
 			fromCacheText = '(fresh Value)'
 		}
-		render "Hello World! $value $fromCacheText $text"
+		def cacheString = cacheEntriesToString()
+		render "Hello Cache Test! $value $fromCacheText $text <br><pre>$cacheString</pre>"
+	}
+
+	private cacheEntriesToString() {
+		def cacheString = ''
+		cacheString = cacheString << "grailsCacheManager: $grailsCacheManager\n"
+		def cacheNames = grailsCacheManager.getCacheNames()
+		cacheString = cacheString << "cacheNames: $cacheNames\n"
+		cacheNames.each {
+			def cache = grailsCacheManager.getCache(it)
+			def allKeys = cache.getAllKeys()
+			cacheString = cacheString << "  named cache '$it' (${allKeys.size()}) entries:\n"
+			allKeys.each{ key ->
+				cacheString = cacheString << "    entry: ${key.simpleKey} = ${cache.get(key).get()}\n"
+			}
+		}
+		return cacheString
 	}
 
 	@Cacheable('test')
