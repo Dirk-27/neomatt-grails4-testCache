@@ -9,6 +9,8 @@ Clone the repository.
 # IDE
 The workspace is prepared for using eclipse with groovy nature with Groovy Development Tools Version 4.8.0-Release.
 
+Use `gradle eclipse` to prepare eclipse for your workspace.
+
 # Start
 Use:
 * grails run-app or
@@ -18,3 +20,6 @@ Go to url http://localhost:8080/hello/index with you browser.
 
 # Source Code
 All is implemented in the HelloController.
+
+# Upgrading Grails
+In a Grails 5.3.2 project the HelloController works without changes.
